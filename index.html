@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Olympus Auth & Directory | Acceso al Sistema</title>
+    <!-- FontAwesome para íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="auth-body">
+
+    <main class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="brand-logo">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>OLYMPUS <strong>AUTH</strong></span>
+                </div>
+                <p>Plataforma de Gestión de Accesos y Directorio</p>
+            </div>
+
+            <!-- Tabs de navegación -->
+            <div class="auth-tabs">
+                <button class="tab-btn active" id="tabLoginBtn" onclick="switchTab('login')">
+                    <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión
+                </button>
+                <button class="tab-btn" id="tabRegisterBtn" onclick="switchTab('register')">
+                    <i class="fa-solid fa-user-plus"></i> Registrarse
+                </button>
+            </div>
+
+            <!-- Contenedor Alerta/Notificaciones -->
+            <div id="authAlert" class="auth-alert" style="display: none;"></div>
+
+            <!-- Formulario de Login -->
+            <form id="loginForm" class="auth-form active">
+                <div class="form-group">
+                    <label for="loginEmail"><i class="fa-solid fa-envelope"></i> Correo Electrónico</label>
+                    <input type="email" id="loginEmail" placeholder="admin@olympus.cl" required autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <label for="loginPassword"><i class="fa-solid fa-lock"></i> Contraseña</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="loginPassword" placeholder="••••••••" required autocomplete="current-password">
+                        <button type="button" class="btn-toggle-pwd" onclick="togglePasswordVisibility('loginPassword', this)">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-options">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="rememberMe">
+                        <span class="checkmark"></span> Recordarme en este equipo
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">
+                    Acceder al Panel <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                </button>
+            </form>
+
+            <!-- Formulario de Registro -->
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <label for="regNombre"><i class="fa-solid fa-user"></i> Nombre Completo</label>
+                    <input type="text" id="regNombre" placeholder="Ej: Valentina Morales" required autocomplete="name">
+                </div>
+
+                <div class="form-group">
+                    <label for="regEmail"><i class="fa-solid fa-envelope"></i> Correo Electrónico</label>
+                    <input type="email" id="regEmail" placeholder="usuario@olympus.cl" required autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <label for="regRole"><i class="fa-solid fa-user-tag"></i> Rol Solicitado</label>
+                    <select id="regRole" required>
+                        <option value="Cliente">Cliente (Acceso Básico)</option>
+                        <option value="Colaborador">Colaborador (Gestión)</option>
+                        <option value="Admin">Administrador (Control Total)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="regPassword"><i class="fa-solid fa-lock"></i> Contraseña</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="regPassword" placeholder="Mín. 8 caract., 1 mayús. y 1 núm." required autocomplete="new-password">
+                        <button type="button" class="btn-toggle-pwd" onclick="togglePasswordVisibility('regPassword', this)">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                    <!-- Indicador de fortaleza -->
+                    <div class="password-hints">
+                        <span id="hintLength" class="hint-item"><i class="fa-solid fa-circle-xmark"></i> 8+ Caracteres</span>
+                        <span id="hintUpper" class="hint-item"><i class="fa-solid fa-circle-xmark"></i> 1 Mayúscula</span>
+                        <span id="hintNumber" class="hint-item"><i class="fa-solid fa-circle-xmark"></i> 1 Número</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">
+                    Crear Cuenta <i class="fa-solid fa-user-check"></i>
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <script src="js/auth.js"></script>
+</body>
+</html>

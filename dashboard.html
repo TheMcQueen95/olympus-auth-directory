@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Olympus Auth & Directory | Dashboard de Control</title>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="dashboard-body">
+
+    <!-- Middleware / Guard de Seguridad Inmediato -->
+    <script src="js/guard.js"></script>
+
+    <!-- Header / Navbar -->
+    <header class="top-navbar">
+        <div class="nav-container">
+            <div class="brand-logo">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>OLYMPUS <strong>DIRECTORY</strong></span>
+            </div>
+
+            <!-- Acciones de Usuario & Hamburguesa -->
+            <div class="nav-right">
+                <div class="user-badge-header">
+                    <span id="headerUserName" class="user-name">Cargando...</span>
+                    <span id="headerUserRole" class="badge-role">Rol</span>
+                </div>
+
+                <button class="nav-toggle" id="navToggle" aria-label="Abrir menú de usuario">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+
+                <div class="nav-menu" id="navMenu">
+                    <div class="mobile-user-info">
+                        <i class="fa-solid fa-circle-user fa-2x"></i>
+                        <div>
+                            <strong id="mobileUserName">-</strong>
+                            <small id="mobileUserRole">-</small>
+                        </div>
+                    </div>
+                    <button class="btn-logout" id="btnLogout">
+                        <i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Layout Principal -->
+    <main class="dashboard-layout container">
+        
+        <!-- Tarjetas Metricas / KPIs -->
+        <section class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-icon icon-users"><i class="fa-solid fa-users"></i></div>
+                <div class="kpi-data">
+                    <span class="kpi-title">Total Personas</span>
+                    <strong id="kpiTotalUsers" class="kpi-value">0</strong>
+                </div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-icon icon-active"><i class="fa-solid fa-user-check"></i></div>
+                <div class="kpi-data">
+                    <span class="kpi-title">Activos</span>
+                    <strong id="kpiActiveUsers" class="kpi-value">0</strong>
+                </div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-icon icon-admin"><i class="fa-solid fa-user-shield"></i></div>
+                <div class="kpi-data">
+                    <span class="kpi-title">Administradores</span>
+                    <strong id="kpiAdminUsers" class="kpi-value">0</strong>
+                </div>
+            </div>
+        </section>
+
+        <!-- Barra de Herramientas (Buscador, Filtros y Nuevo Usuario) -->
+        <section class="toolbar-card">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="Buscar por nombre o correo...">
+            </div>
+
+            <div class="filter-box">
+                <select id="roleFilter">
+                    <option value="Todos">Todos los Roles</option>
+                    <option value="Admin">Administrador</option>
+                    <option value="Colaborador">Colaborador</option>
+                    <option value="Cliente">Cliente</option>
+                </select>
+
+                <select id="statusFilter">
+                    <option value="Todos">Todos los Estados</option>
+                    <option value="Activo">Activo</option>
+                    <option value="Inactivo">Inactivo</option>
+                </select>
+
+                <button class="btn btn-primary" id="btnOpenCreateModal">
+                    <i class="fa-solid fa-user-plus"></i> Nueva Persona
+                </button>
+            </div>
+        </section>
+
+        <!-- Tabla de Personas / Directorio -->
+        <section class="directory-card">
+            <div class="table-responsive">
+                <table class="directory-table">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Correo Electrónico</th>
+                            <th>Rol</th>
+                            <th>Estado</th>
+                            <th class="text-end">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="directoryTableBody">
+                        <!-- Filas renderizadas dinámicamente con JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal Crear / Editar Persona -->
+    <div class="modal-overlay" id="userModal" style="display: none;">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="modalTitle"><i class="fa-solid fa-user-gear"></i> Registrar Nueva Persona</h3>
+                <button class="btn-close-modal" id="btnCloseModal">&times;</button>
+            </div>
+            
+            <form id="userForm" class="modal-body">
+                <input type="hidden" id="userIdHidden">
+                
+                <div class="form-group">
+                    <label for="modalNombre">Nombre Completo</label>
+                    <input type="text" id="modalNombre" placeholder="Ej: Carlos Silva" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="modalEmail">Correo Electrónico</label>
+                    <input type="email" id="modalEmail" placeholder="carlos@olympus.cl" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-half">
+                        <label for="modalRol">Rol de Usuario</label>
+                        <select id="modalRol" required>
+                            <option value="Cliente">Cliente</option>
+                            <option value="Colaborador">Colaborador</option>
+                            <option value="Admin">Administrador</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-half">
+                        <label for="modalEstado">Estado de Cuenta</label>
+                        <select id="modalEstado" required>
+                            <option value="Activo">Activo</option>
+                            <option value="Inactivo">Inactivo</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="btnCancelModal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" id="btnSaveUser">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/dashboard.js"></script>
+</body>
+</html>
